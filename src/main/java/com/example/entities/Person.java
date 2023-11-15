@@ -1,7 +1,7 @@
 package com.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +13,7 @@ public class Person {
     private Long Id;
     private String firstName;
     private String lastName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOfBirth;
 
 
@@ -41,6 +42,10 @@ public class Person {
     }
 
     //SETTERS
+
+    public void setId(Long id) {
+        Id = id;
+    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

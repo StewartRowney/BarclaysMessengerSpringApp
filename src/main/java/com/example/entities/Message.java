@@ -31,6 +31,7 @@ public class Message {
     public void setContent(String content) {
         this.content = content;
     }
-
-
+    public void setId(Long id) {
+        Id = id;
+    }
 }
