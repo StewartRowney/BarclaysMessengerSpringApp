@@ -18,4 +18,11 @@ class MessageControllerNoSpringTest {
         verify(mockService, times(1)).getAllMessages();
     }
 
+    @Test
+    void test_GetMessage() {
+        Long messageId = 3L;
+        uut.getMessage(messageId);
+        verify(mockService, times(1)).getMessage(messageId);
+    }
+
 }

@@ -28,4 +28,13 @@ class PersonControllerSpringWebTest {
 
         verify(mockService, times(1)).getAllPersons();
     }
+
+    @Test
+    void test_ServiceCalledFor_GetPersonById() throws Exception {
+        Long personId = 2L;
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/persons/" + personId);
+        mockMvc.perform(requestBuilder);
+
+        verify(mockService, times(1)).getPersonById(personId);
+    }
 }

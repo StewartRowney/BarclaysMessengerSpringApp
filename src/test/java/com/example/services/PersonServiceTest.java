@@ -16,4 +16,11 @@ class PersonServiceTest {
         uut.getAllPersons();
         verify(mockRepo, times(1)).findAll();
     }
+
+    @Test
+    void test_GetPerson() {
+        Long personId = 2L;
+        uut.getPersonById(personId);
+        verify(mockRepo, times(1)).findById(personId);
+    }
 }

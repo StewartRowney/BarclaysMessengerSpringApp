@@ -4,6 +4,7 @@ import com.example.entities.Person;
 import com.example.services.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,10 @@ public class PersonController {
     @GetMapping("")
     public List<Person> getAllPersons() {
         return service.getAllPersons();
+    }
+
+    @GetMapping("/{personId}")
+    public Person getPerson(@PathVariable Long personId) {
+        return service.getPersonById(personId);
     }
 }

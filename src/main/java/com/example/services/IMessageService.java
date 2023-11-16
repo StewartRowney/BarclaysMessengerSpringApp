@@ -9,4 +9,5 @@ import java.util.List;
 public interface IMessageService {
 
     List<Message> getAllMessages();
+    Message getMessage(Long messageId);
 }

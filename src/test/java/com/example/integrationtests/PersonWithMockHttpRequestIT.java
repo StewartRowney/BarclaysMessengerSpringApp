@@ -50,4 +50,23 @@ public class PersonWithMockHttpRequestIT {
         assertEquals("Abhijeet", actualPersons[2].getFirstName());
     }
 
+    @Test
+    public void testGettingPerson() throws Exception {
+
+        Long personId = 2L;
+
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons/" + personId)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        Person actualperson = mapper.readValue(contentAsJson, Person.class);
+
+        assertEquals("Ayush", actualperson.getFirstName());
+    }
+
 }

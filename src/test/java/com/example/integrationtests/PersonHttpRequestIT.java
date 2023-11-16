@@ -17,11 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersonHttpRequestIT {
 
-    ObjectMapper mapper = new ObjectMapper();
 
     @Test
     @Disabled
-    void getAllMessagesTest() throws IOException {
+    void getAllPersonsTest() throws IOException {
         HttpUriRequest request = new HttpGet("http://localhost:8080/persons");
         HttpResponse response = HttpClientBuilder.create().build().execute(request);
 

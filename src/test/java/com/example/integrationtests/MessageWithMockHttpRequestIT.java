@@ -46,4 +46,22 @@ public class MessageWithMockHttpRequestIT {
         assertEquals("message", actualMessages[2].getContent());
     }
 
+    @Test
+    public void testGettingMessage() throws Exception {
+
+        Long messageId = 2L;
+
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/messages/" + messageId)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        Message actualMessage = mapper.readValue(contentAsJson, Message.class);
+
+        assertEquals("hello", actualMessage.getContent());
+    }
+
 }

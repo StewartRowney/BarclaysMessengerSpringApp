@@ -25,4 +25,11 @@ class MessageServiceSpringTest {
         verify(mockRepo, times(1)).findAll();
     }
 
+    @Test
+    void test_GetMessage() {
+        Long messageId = 4L;
+        uut.getMessage(messageId);
+        verify(mockRepo, times(1)).findById(messageId);
+    }
+
 }

@@ -24,4 +24,11 @@ class PersonControllerSpringTest {
         uut.getAllPersons();
         verify(mockService, times(1)).getAllPersons();
     }
+
+    @Test
+    public void test_GetPerson() {
+        Long personId = 2L;
+        uut.getPerson(personId);
+        verify(mockService, times(1)).getPersonById(personId);
+    }
 }

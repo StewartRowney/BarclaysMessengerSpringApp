@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService implements IPersonService{
@@ -20,5 +21,11 @@ public class PersonService implements IPersonService{
 
     public List<Person> getAllPersons() {
         return repo.findAll();
+    }
+
+    @Override
+    public Person getPersonById(Long personId) {
+        Optional<Person> person = repo.findById(personId);
+        return person.orElse(null);
     }
 }

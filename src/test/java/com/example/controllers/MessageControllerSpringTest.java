@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -23,5 +24,12 @@ class MessageControllerSpringTest {
     public void test_GetAllMessages() {
         uut.getAllMessages();
         verify(mockService, times(1)).getAllMessages();
+    }
+
+    @Test
+    void test_GetMessage() {
+        Long messageId = 3L;
+        uut.getMessage(messageId);
+        verify(mockService, times(1)).getMessage(messageId);
     }
 }

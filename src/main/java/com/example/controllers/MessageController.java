@@ -4,9 +4,8 @@ import com.example.entities.Message;
 import com.example.services.IMessageService;
 import com.example.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -23,6 +22,11 @@ public class MessageController {
     @GetMapping("")
     public List<Message> getAllMessages() {
         return messageService.getAllMessages();
+    }
+
+    @GetMapping("/{messageId}")
+    public Message getMessage(@PathVariable Long messageId) {
+        return messageService.getMessage(messageId);
     }
 
 

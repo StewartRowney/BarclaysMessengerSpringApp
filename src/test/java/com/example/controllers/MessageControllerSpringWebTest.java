@@ -26,4 +26,13 @@ class MessageControllerSpringWebTest {
 
         verify(mockService, times(1)).getAllMessages();
     }
+
+    @Test
+    void test_GetMessage() throws Exception {
+        Long messageId = 3L;
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/messages/" + messageId);
+        mockMvc.perform(requestBuilder);
+
+        verify(mockService, times(1)).getMessage(messageId);
+    }
 }
