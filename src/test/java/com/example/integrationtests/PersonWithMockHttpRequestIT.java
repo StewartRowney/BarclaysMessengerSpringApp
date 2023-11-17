@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
+@ActiveProfiles("test")
 public class PersonWithMockHttpRequestIT {
 
     @Autowired
@@ -44,10 +46,10 @@ public class PersonWithMockHttpRequestIT {
         mapper.registerModule(new JavaTimeModule());
         Person[] actualPersons = mapper.readValue(contentAsJson, Person[].class);
 
-        assertEquals("Stewart", actualPersons[3].getFirstName());
-        assertEquals("Ayush", actualPersons[0].getFirstName());
-        assertEquals("Thomas", actualPersons[1].getFirstName());
-        assertEquals("Abhijeet", actualPersons[2].getFirstName());
+        assertEquals("Stewart", actualPersons[0].getFirstName());
+        assertEquals("Ayush", actualPersons[1].getFirstName());
+        assertEquals("Thomas", actualPersons[2].getFirstName());
+        assertEquals("Abhijeet", actualPersons[3].getFirstName());
     }
 
     @Test

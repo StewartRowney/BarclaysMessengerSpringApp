@@ -29,4 +29,9 @@ public class MessageService implements IMessageService{
         return message.orElse(null);
     }
 
+    @Override
+    public List<Message> getMessageBySenderFirstName(String firstName) {
+        return repo.findMessageBySenderFirstName(firstName);
+    }
+
 }

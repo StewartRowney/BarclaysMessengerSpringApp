@@ -35,4 +35,13 @@ class MessageControllerSpringWebTest {
 
         verify(mockService, times(1)).getMessage(messageId);
     }
+
+    @Test
+    void test_GetMessageFromSenderFirstName() throws Exception {
+        String name = "Stewart";
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/messages/sender/firstName/" + name);
+        mockMvc.perform(requestBuilder);
+
+        verify(mockService, times(1)).getMessageBySenderFirstName(name);
+    }
 }

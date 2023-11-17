@@ -29,5 +29,9 @@ public class MessageController {
         return messageService.getMessage(messageId);
     }
 
+    @GetMapping("/sender/firstName/{name}")
+    public List<Message> getMessageBySenderFirstName(@PathVariable String name) {
+        return messageService.getMessageBySenderFirstName(name);
+    }
 
 }

@@ -2,7 +2,11 @@ package com.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Person {
@@ -15,7 +19,8 @@ public class Person {
     private String lastName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateOfBirth;
-
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages = new ArrayList<>();;
 
     //CONSTRUCTORS
     public Person(String firstName, String lastName, LocalDateTime dateOfBirth) {
@@ -23,7 +28,6 @@ public class Person {
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
     }
-
     public Person() {
     }
 
@@ -42,7 +46,6 @@ public class Person {
     }
 
     //SETTERS
-
     public void setId(Long id) {
         Id = id;
     }

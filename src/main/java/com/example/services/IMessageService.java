@@ -10,4 +10,5 @@ public interface IMessageService {
 
     List<Message> getAllMessages();
     Message getMessage(Long messageId);
+    List<Message> getMessageBySenderFirstName(String firstName);
 }

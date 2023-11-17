@@ -32,4 +32,11 @@ class MessageControllerSpringTest {
         uut.getMessage(messageId);
         verify(mockService, times(1)).getMessage(messageId);
     }
+
+    @Test
+    void test_GetMessageFromSenderFirstName() {
+        String name = "Stewart";
+        uut.getMessageBySenderFirstName(name);
+        verify(mockService, times(1)).getMessageBySenderFirstName(name);
+    }
 }
