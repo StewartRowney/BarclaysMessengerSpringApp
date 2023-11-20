@@ -1,10 +1,13 @@
 package com.example.controllers;
 
+import com.example.entities.Person;
 import com.example.services.IPersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
@@ -30,5 +33,12 @@ class PersonControllerSpringTest {
         Long personId = 2L;
         uut.getPerson(personId);
         verify(mockService, times(1)).getPersonById(personId);
+    }
+
+    @Test
+    public void test_AddPerson() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        uut.addPerson(person);
+        verify(mockService, times(1)).addPerson(person);
     }
 }

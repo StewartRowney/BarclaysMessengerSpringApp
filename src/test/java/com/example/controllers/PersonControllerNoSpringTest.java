@@ -1,8 +1,11 @@
 package com.example.controllers;
 
+import com.example.entities.Person;
 import com.example.services.IPersonService;
 import com.example.services.PersonService;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,6 +26,13 @@ class PersonControllerNoSpringTest {
         Long personId = 2L;
         uut.getPerson(personId);
         verify(mockService, times(1)).getPersonById(personId);
+    }
+
+    @Test
+    public void test_AddPerson() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        uut.addPerson(person);
+        verify(mockService, times(1)).addPerson(person);
     }
 
 }

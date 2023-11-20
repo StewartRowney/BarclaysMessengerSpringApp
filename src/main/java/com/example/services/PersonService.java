@@ -3,7 +3,9 @@ package com.example.services;
 import com.example.data.IPersonRepository;
 import com.example.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +29,13 @@ public class PersonService implements IPersonService{
     public Person getPersonById(Long personId) {
         Optional<Person> person = repo.findById(personId);
         return person.orElse(null);
+    }
+
+    @Override
+    public Person addPerson(Person person) {
+        if (person.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot set Person id, set value to null");
+        }
+        return repo.save(person);
     }
 }

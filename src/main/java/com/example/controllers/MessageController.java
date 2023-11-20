@@ -4,6 +4,9 @@ import com.example.entities.Message;
 import com.example.services.IMessageService;
 import com.example.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<Message> getAllMessages() {
         return messageService.getAllMessages();
     }
@@ -32,6 +35,12 @@ public class MessageController {
     @GetMapping("/sender/firstName/{name}")
     public List<Message> getMessageBySenderFirstName(@PathVariable String name) {
         return messageService.getMessageBySenderFirstName(name);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Message addMessage(@RequestBody Message message) {
+        return messageService.addMessage(message);
     }
 
 }

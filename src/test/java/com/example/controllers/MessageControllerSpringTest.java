@@ -1,5 +1,7 @@
 package com.example.controllers;
 
+import com.example.entities.Message;
+import com.example.entities.Person;
 import com.example.services.IMessageService;
 import com.example.services.MessageService;
 import org.junit.jupiter.api.Test;
@@ -38,5 +40,12 @@ class MessageControllerSpringTest {
         String name = "Stewart";
         uut.getMessageBySenderFirstName(name);
         verify(mockService, times(1)).getMessageBySenderFirstName(name);
+    }
+
+    @Test
+    void test_AddMessage() {
+        Message message = new Message("This is a message", new Person());
+        uut.addMessage(message);
+        verify(mockService, times(1)).addMessage(message);
     }
 }
