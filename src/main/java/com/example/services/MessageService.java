@@ -42,11 +42,15 @@ public class MessageService implements IMessageService{
     @Override
     public Message addMessage(Message message) {
 
+        if(message.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot set Person id, set value to null");
+        }
+
         if (message.getSender() == null || message.getSender().getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not a valid message sender");
         }
-        Person sender = personService.getPersonById(message.getSender().getId());
 
+        Person sender = personService.getPersonById(message.getSender().getId());
         if (sender == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Message sender does not exist");
         }

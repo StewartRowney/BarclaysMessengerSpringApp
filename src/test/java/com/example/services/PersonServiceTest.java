@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.data.IPersonRepository;
 import com.example.entities.Person;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -39,5 +40,12 @@ class PersonServiceTest {
         Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
         uut.addPerson(person);
         verify(mockRepo, times(1)).save(person);
+    }
+
+    @Test
+    void test_AddPerson_WithPersonId() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        person.setId(10L);
+        assertThrows(ResponseStatusException.class,() -> uut.addPerson(person));
     }
 }

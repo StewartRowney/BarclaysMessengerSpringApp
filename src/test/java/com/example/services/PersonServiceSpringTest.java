@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -40,5 +41,12 @@ class PersonServiceSpringTest {
         Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
         uut.addPerson(person);
         verify(mockRepo, times(1)).save(person);
+    }
+
+    @Test
+    void test_AddPerson_WithPersonId() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        person.setId(10L);
+        assertThrows(ResponseStatusException.class,() -> uut.addPerson(person));
     }
 }

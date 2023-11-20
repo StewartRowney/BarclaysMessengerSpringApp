@@ -77,4 +77,13 @@ class MessageServiceSpringTest {
         assertThrows(ResponseStatusException.class, () -> uut.addMessage(message));
     }
 
+    @Test
+    void test_AddMessage_MessageHasId() {
+        Person person = new Person();
+        Message message = new Message("Message", person);
+        message.setId(2L);
+
+        assertThrows(ResponseStatusException.class, () -> uut.addMessage(message));
+    }
+
 }
