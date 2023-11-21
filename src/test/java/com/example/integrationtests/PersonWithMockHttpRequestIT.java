@@ -1,6 +1,5 @@
 package com.example.integrationtests;
 
-import com.example.entities.Message;
 import com.example.entities.Person;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -17,14 +16,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,17 +40,7 @@ public class PersonWithMockHttpRequestIT {
 
     @Test
     public void testGettingAllPersons() throws Exception {
-
-        MvcResult result =
-                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons")))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                        .andReturn();
-
-        String contentAsJson = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Person[] actualPersons = mapper.readValue(contentAsJson, Person[].class);
+        Person[] actualPersons = getAllPersons();
 
         assertEquals("Stewart", actualPersons[0].getFirstName());
         assertEquals("Ayush", actualPersons[1].getFirstName());
@@ -82,7 +70,7 @@ public class PersonWithMockHttpRequestIT {
     @Test
     public void testAddPerson() throws Exception {
 
-        //todo: ask dave about ORM not knowing about the primary keys of test data, may have to just change test data id's
+        int numberOfPersonsBeforeAdd = getAllPersons().length;
 
         Person person = new Person("Jim", "Bob", LocalDateTime.of(2000,10,10,14,55));
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -100,13 +88,29 @@ public class PersonWithMockHttpRequestIT {
 
         String contentAsJson = result.getResponse().getContentAsString();
         Person actualperson = mapper.readValue(contentAsJson, Person.class);
+        int numberOfPersonsAfterAdd = getAllPersons().length;
 
         assertAll(
                 () -> assertEquals(person.getFirstName(), actualperson.getFirstName()),
                 () -> assertEquals(person.getLastName(), actualperson.getLastName()),
-                () -> assertEquals(person.getDateOfBirth(), actualperson.getDateOfBirth())
+                () -> assertEquals(person.getDateOfBirth(), actualperson.getDateOfBirth()),
+                () -> assertEquals(numberOfPersonsBeforeAdd + 1, numberOfPersonsAfterAdd)
+
         );
 
+    }
+
+    private Person[] getAllPersons() throws Exception {
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons")))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(contentAsJson, Person[].class);
     }
 
 }

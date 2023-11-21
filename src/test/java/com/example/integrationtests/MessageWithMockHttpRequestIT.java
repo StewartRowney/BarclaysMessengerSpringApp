@@ -38,17 +38,7 @@ public class MessageWithMockHttpRequestIT {
 
     @Test
     public void testGettingAllMessages() throws Exception {
-
-        MvcResult result =
-                (this.mockMvc.perform(MockMvcRequestBuilders.get("/messages")))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                        .andReturn();
-
-        String contentAsJson = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Message[] actualMessages = mapper.readValue(contentAsJson, Message[].class);
+        Message[] actualMessages = getAllMessages();
 
         assertEquals("This is a message", actualMessages[0].getContent());
         assertEquals("hello", actualMessages[1].getContent());
@@ -96,6 +86,9 @@ public class MessageWithMockHttpRequestIT {
 
     @Test
     public void testAddMessage() throws Exception {
+
+        int numberOfMessagesBeforeAdd = getAllMessages().length;
+
         Person person = new Person();
         person.setId(2L);
         Message message = new Message("Message", person);
@@ -114,12 +107,27 @@ public class MessageWithMockHttpRequestIT {
 
         String contentAsJson = result.getResponse().getContentAsString();
         Message actualMessage = mapper.readValue(contentAsJson, Message.class);
+        int numberOfMessagesAfterAdd = getAllMessages().length;
 
         assertAll(
                 () -> assertEquals(message.getContent(), actualMessage.getContent()),
-                () -> assertEquals(message.getSender().getId(), actualMessage.getSender().getId())
+                () -> assertEquals(message.getSender().getId(), actualMessage.getSender().getId()),
+                () -> assertEquals(numberOfMessagesBeforeAdd + 1, numberOfMessagesAfterAdd)
         );
 
+    }
+
+    private Message[] getAllMessages() throws Exception {
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/messages")))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(contentAsJson, Message[].class);
     }
 
 }
