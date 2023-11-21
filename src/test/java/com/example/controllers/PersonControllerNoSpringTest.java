@@ -35,4 +35,11 @@ class PersonControllerNoSpringTest {
         verify(mockService, times(1)).addPerson(person);
     }
 
+    @Test
+    public void test_UpdatePerson() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        uut.updatePerson(person);
+        verify(mockService, times(1)).updatePerson(person);
+    }
+
 }

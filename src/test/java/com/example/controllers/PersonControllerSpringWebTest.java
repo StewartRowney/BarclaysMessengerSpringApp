@@ -63,4 +63,21 @@ class PersonControllerSpringWebTest {
 
         verify(mockService, times(1)).addPerson(any(Person.class));
     }
+
+    @Test
+    public void test_ServiceCalledFor_UpdatePerson() throws Exception {
+        Person person = new Person("Jim", "Bob", LocalDateTime.of(2000,10,10,14,55));
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        String json = mapper.writeValueAsString(person);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/persons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(mockService, times(1)).updatePerson(any(Person.class));
+    }
 }

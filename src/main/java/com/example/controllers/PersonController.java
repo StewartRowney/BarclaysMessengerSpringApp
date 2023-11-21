@@ -36,4 +36,10 @@ public class PersonController {
     public Person addPerson(@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Person person) {
         return service.addPerson(person);
     }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Person updatePerson(@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Person person) {
+        return service.updatePerson(person);
+    }
 }

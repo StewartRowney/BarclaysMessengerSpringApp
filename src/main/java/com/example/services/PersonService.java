@@ -38,4 +38,17 @@ public class PersonService implements IPersonService{
         }
         return repo.save(person);
     }
+
+    @Override
+    public Person updatePerson(Person person) {
+        if (person == null || person.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person to update must have an Id");
+        }
+
+        if (!repo.existsById(person.getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person to update does not exist");
+        }
+
+        return repo.save(person);
+    }
 }

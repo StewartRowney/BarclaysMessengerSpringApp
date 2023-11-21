@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,6 +72,56 @@ public class PersonWithMockHttpRequestIT {
         int numberOfPersonsBeforeAdd = getAllPersons().length;
 
         Person person = new Person("Jim", "Bob", LocalDateTime.of(2000,10,10,14,55));
+        Person actualperson = addPerson(person);
+        int numberOfPersonsAfterAdd = getAllPersons().length;
+
+        assertAll(
+                () -> assertEquals(person.getFirstName(), actualperson.getFirstName()),
+                () -> assertEquals(person.getLastName(), actualperson.getLastName()),
+                () -> assertEquals(person.getDateOfBirth(), actualperson.getDateOfBirth()),
+                () -> assertEquals(numberOfPersonsBeforeAdd + 1, numberOfPersonsAfterAdd)
+
+        );
+
+    }
+
+    @Test
+    public void updatePerson() throws Exception {
+        Person personToUpdate = addPerson(new Person("Update", "Me", LocalDateTime.of(2000,10,10,14,55)));
+        int numberOfPersonsBeforeUpdate = getAllPersons().length;
+        personToUpdate.setFirstName("Updated");
+        personToUpdate.setLastName("Person");
+
+        Person updatedPerson = updatePerson(personToUpdate);
+        int numberOfPersonsAfterUpdate = getAllPersons().length;
+
+        assertAll(
+                () -> assertEquals(personToUpdate.getFirstName(), updatedPerson.getFirstName()),
+                () -> assertEquals(personToUpdate.getLastName(), updatedPerson.getLastName()),
+                () -> assertEquals(personToUpdate.getId(), updatedPerson.getId()),
+                () -> assertEquals(numberOfPersonsBeforeUpdate, numberOfPersonsAfterUpdate)
+        );
+    }
+
+    private Person updatePerson(Person personToUpdate) throws Exception {
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        String json = mapper.writeValueAsString(personToUpdate);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/persons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = (mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn());
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        return mapper.readValue(contentAsJson, Person.class);
+    }
+
+    private Person addPerson(Person person) throws Exception {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(person);
 
@@ -87,17 +136,7 @@ public class PersonWithMockHttpRequestIT {
                 .andReturn());
 
         String contentAsJson = result.getResponse().getContentAsString();
-        Person actualperson = mapper.readValue(contentAsJson, Person.class);
-        int numberOfPersonsAfterAdd = getAllPersons().length;
-
-        assertAll(
-                () -> assertEquals(person.getFirstName(), actualperson.getFirstName()),
-                () -> assertEquals(person.getLastName(), actualperson.getLastName()),
-                () -> assertEquals(person.getDateOfBirth(), actualperson.getDateOfBirth()),
-                () -> assertEquals(numberOfPersonsBeforeAdd + 1, numberOfPersonsAfterAdd)
-
-        );
-
+        return mapper.readValue(contentAsJson, Person.class);
     }
 
     private Person[] getAllPersons() throws Exception {
