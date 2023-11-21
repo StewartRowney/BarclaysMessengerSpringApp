@@ -89,8 +89,7 @@ public class MessageWithMockHttpRequestIT {
 
         int numberOfMessagesBeforeAdd = getAllMessages().length;
 
-        Person person = new Person();
-        person.setId(2L);
+        Person person = getPerson(3L);
         Message message = new Message("Message", person);
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(message);
@@ -128,6 +127,19 @@ public class MessageWithMockHttpRequestIT {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(contentAsJson, Message[].class);
+    }
+
+    private Person getPerson(Long personId) throws Exception {
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons/" + personId)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(contentAsJson, Person.class);
     }
 
 }

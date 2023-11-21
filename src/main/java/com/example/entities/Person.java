@@ -2,7 +2,6 @@ package com.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class Person {
     //VARIABLES
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
     private String firstName;
     private String lastName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -23,17 +22,17 @@ public class Person {
     private List<Message> sentMessages = new ArrayList<>();;
 
     //CONSTRUCTORS
+    public Person() {
+    }
     public Person(String firstName, String lastName, LocalDateTime dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
     }
-    public Person() {
-    }
 
     //GETTERS
     public Long getId() {
-        return Id;
+        return id;
     }
     public String getFirstName() {
         return firstName;
@@ -46,9 +45,6 @@ public class Person {
     }
 
     //SETTERS
-    public void setId(Long id) {
-        Id = id;
-    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -58,4 +54,5 @@ public class Person {
     public void setDateOfBirth(LocalDateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
 }
