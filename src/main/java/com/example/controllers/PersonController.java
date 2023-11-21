@@ -42,4 +42,10 @@ public class PersonController {
     public Person updatePerson(@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Person person) {
         return service.updatePerson(person);
     }
+
+    @DeleteMapping("/{personId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePerson(@PathVariable Long personId) {
+        service.deletePerson(personId);
+    }
 }

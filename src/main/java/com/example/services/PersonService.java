@@ -51,4 +51,16 @@ public class PersonService implements IPersonService{
 
         return repo.save(person);
     }
+
+    @Override
+    public void deletePerson(Long personId) {
+        if (personId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person id cannot be null");
+        }
+
+        if (!repo.existsById(personId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person to update does not exist");
+        }
+        repo.deleteById(personId);
+    }
 }

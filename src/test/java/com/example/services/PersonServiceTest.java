@@ -73,4 +73,23 @@ class PersonServiceTest {
         Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
         assertThrows(ResponseStatusException.class,() -> uut.updatePerson(person));
     }
+
+    @Test
+    void test_DeletePerson_ValidId() {
+        Long personId = 5L;
+        when(mockRepo.existsById(personId)).thenReturn(true);
+        uut.deletePerson(personId);
+    }
+
+    @Test
+    void test_DeletePerson_InValidId() {
+        Long personId = 5L;
+        when(mockRepo.existsById(personId)).thenReturn(false);
+        assertThrows(ResponseStatusException.class,() -> uut.deletePerson(personId));
+    }
+
+    @Test
+    void test_DeletePerson_NoId() {
+        assertThrows(ResponseStatusException.class,() -> uut.deletePerson(null));
+    }
 }

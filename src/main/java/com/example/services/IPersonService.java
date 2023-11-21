@@ -9,4 +9,5 @@ public interface IPersonService {
     Person getPersonById(Long personId);
     Person addPerson(Person person);
     Person updatePerson(Person person);
+    void deletePerson(Long personId);
 }

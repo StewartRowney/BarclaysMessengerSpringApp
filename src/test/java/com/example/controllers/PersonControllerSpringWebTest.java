@@ -80,4 +80,13 @@ class PersonControllerSpringWebTest {
 
         verify(mockService, times(1)).updatePerson(any(Person.class));
     }
+
+    @Test
+    public void test_DeletePerson() throws Exception {
+        Long personId = 5L;
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/persons/" + personId);
+        mockMvc.perform(requestBuilder);
+
+        verify(mockService, times(1)).deletePerson(personId);
+    }
 }

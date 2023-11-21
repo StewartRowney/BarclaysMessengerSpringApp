@@ -30,9 +30,11 @@ public class Populator {
     public void populate() {
         Person person1 = new Person("Stewart", "Rowney", LocalDateTime.of(1999, Month.AUGUST, 15, 10, 30));
         Person person2 = new Person("Jim", "Doherty", LocalDateTime.of(1987, Month.APRIL, 10, 10, 30));
+        Person person3 = new Person("Terry", "Bay", LocalDateTime.of(2010, Month.DECEMBER, 10, 10, 30));
 
         personRepo.save(person1);
         personRepo.save(person2);
+        personRepo.save(person3);
 
         messageRepo.save(new Message("Message", person1));
         messageRepo.save(new Message("Message2", person1));

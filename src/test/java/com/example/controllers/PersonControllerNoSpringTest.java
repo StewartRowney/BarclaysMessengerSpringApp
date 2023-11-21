@@ -42,4 +42,11 @@ class PersonControllerNoSpringTest {
         verify(mockService, times(1)).updatePerson(person);
     }
 
+    @Test
+    public void test_DeletePerson() {
+        Long personId = 5L;
+        uut.deletePerson(personId);
+        verify(mockService, times(1)).deletePerson(personId);
+    }
+
 }

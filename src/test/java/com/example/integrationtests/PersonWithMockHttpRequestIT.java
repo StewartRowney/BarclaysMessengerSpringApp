@@ -103,6 +103,19 @@ public class PersonWithMockHttpRequestIT {
         );
     }
 
+    @Test
+    public void deletePerson() throws Exception {
+        int numberOfPersonsBeforeDelete = getAllPersons().length;
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/persons/5");
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNoContent());
+
+        int numberOfPersonsAfterDelete = getAllPersons().length;
+
+        assertEquals(numberOfPersonsBeforeDelete - 1, numberOfPersonsAfterDelete);
+    }
+
     private Person updatePerson(Person personToUpdate) throws Exception {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(personToUpdate);
