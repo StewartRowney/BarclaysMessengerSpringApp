@@ -1,0 +1,139 @@
+package com.example.services;
+
+import com.example.data.IPersonRepository;
+import com.example.entities.Person;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest
+@ActiveProfiles("test")
+class PersonServiceSpringTest {
+    @MockBean
+    IPersonRepository mockRepo;
+
+    @Autowired
+    PersonService uut;
+
+    @Test
+    void test_GetAllPersons_ValidRequest() {
+        uut.getAllPersons();
+        verify(mockRepo, times(1)).findAll();
+    }
+
+    @Test
+    void test_GetPersonById_ValidRequest_InDatabase() {
+        Long personId = 2L;
+        uut.getPersonById(personId);
+        verify(mockRepo, times(1)).findById(personId);
+    }
+
+    @Test
+    void test_AddPerson_ValidRequest() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        uut.addPerson(person);
+        verify(mockRepo, times(1)).save(person);
+    }
+
+    @Test
+    void test_AddPerson_InvalidRequest_HasId(){
+        Person person = getPerson();
+        assertThrows(ResponseStatusException.class,() -> uut.addPerson(person));
+    }
+
+    @Test
+    void test_UpdatePerson_ValidRequest_InDatabase(){
+        Person person = getPerson();
+        when(mockRepo.existsById(person.getId())).thenReturn(true);
+        uut.updatePerson(person);
+        verify(mockRepo, times(1)).save(person);
+    }
+
+    @Test
+    void test_UpdatePerson_ValidRequest_NotInDatabase() {
+        Person person = getPerson();
+        when(mockRepo.existsById(person.getId())).thenReturn(false);
+        assertThrows(ResponseStatusException.class,() -> uut.updatePerson(person));
+    }
+
+    @Test
+    void test_UpdatePerson_InvalidRequest_HasNoPersonId() {
+        Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
+        assertThrows(ResponseStatusException.class,() -> uut.updatePerson(person));
+    }
+
+    @Test
+    void test_DeletePerson_ValidRequest_InDatabase() {
+        Long personId = 5L;
+        when(mockRepo.existsById(personId)).thenReturn(true);
+        uut.deletePerson(personId);
+    }
+
+    @Test
+    void test_DeletePerson_ValidRequest_NotInDatabase() {
+        Long personId = 5L;
+        when(mockRepo.existsById(personId)).thenReturn(false);
+        assertThrows(ResponseStatusException.class,() -> uut.deletePerson(personId));
+    }
+
+    @Test
+    void test_DeletePerson_InvalidRequest_HasNoId() {
+        assertThrows(ResponseStatusException.class,() -> uut.deletePerson(null));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_ValidRequest_InDatabase() {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        when(mockRepo.existsById(personId)).thenReturn(true);
+        when(mockRepo.findById(personId)).thenReturn(Optional.of(new Person()));
+        uut.updatePersonDateOfBirth(personId, dateOfBirth);
+        verify(mockRepo, times(1)).save(any(Person.class));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_ValidRequest_NotInDatabase() {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        when(mockRepo.existsById(personId)).thenReturn(false);
+        assertThrows(ResponseStatusException.class, () -> uut.updatePersonDateOfBirth(personId, dateOfBirth));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_InvalidRequest_HasNoId() {
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        assertThrows(ResponseStatusException.class, () -> uut.updatePersonDateOfBirth(null, dateOfBirth));
+    }
+
+    private Person getPerson() {
+        try {
+            String json = """
+                {
+                        "id": 2,
+                        "firstName": "Stewart",
+                        "lastName": "Rowney",
+                        "dateOfBirth": "1983-09-02 10:43:23"
+                    }""";
+
+            ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+            return mapper.readValue(json, Person.class);
+        }
+        catch (JsonProcessingException ex) {
+            return new Person();
+        }
+
+    }
+}
