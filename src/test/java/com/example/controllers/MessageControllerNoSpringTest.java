@@ -5,7 +5,6 @@ import com.example.entities.Person;
 import com.example.services.IMessageService;
 import com.example.services.MessageService;
 import org.junit.jupiter.api.Test;
-import java.util.List;
 import static org.mockito.Mockito.*;
 
 class MessageControllerNoSpringTest {

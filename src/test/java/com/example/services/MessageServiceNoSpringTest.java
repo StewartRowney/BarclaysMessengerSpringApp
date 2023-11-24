@@ -1,16 +1,13 @@
 package com.example.services;
 
 import com.example.data.IMessageRepository;
-import com.example.data.IPersonRepository;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 

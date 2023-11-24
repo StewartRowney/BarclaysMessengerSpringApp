@@ -3,15 +3,10 @@ package com.example.controllers;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import com.example.services.IMessageService;
-import com.example.services.MessageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.server.ResponseStatusException;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -25,7 +20,7 @@ class MessageControllerSpringTest {
     IMessageService mockService;
 
     @Test
-    public void test_GetAllMessages() {
+    void test_GetAllMessages() {
         uut.getAllMessages();
         verify(mockService, times(1)).getAllMessages();
     }

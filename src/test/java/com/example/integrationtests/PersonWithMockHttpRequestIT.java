@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
 @ActiveProfiles("test")
-public class PersonWithMockHttpRequestIT {
+ class PersonWithMockHttpRequestIT {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,7 +38,7 @@ public class PersonWithMockHttpRequestIT {
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Test
-    public void testGettingAllPersons() throws Exception {
+     void testGettingAllPersons() throws Exception {
         Person[] actualPersons = getAllPersons();
 
         assertEquals("Stewart", actualPersons[0].getFirstName());
@@ -48,7 +48,7 @@ public class PersonWithMockHttpRequestIT {
     }
 
     @Test
-    public void testGettingPerson() throws Exception {
+     void testGettingPerson() throws Exception {
 
         long personId = 3L;
 
@@ -58,7 +58,7 @@ public class PersonWithMockHttpRequestIT {
     }
 
     @Test
-    public void testAddPerson() throws Exception {
+     void testAddPerson() throws Exception {
 
         int numberOfPersonsBeforeAdd = getAllPersons().length;
 
@@ -77,7 +77,7 @@ public class PersonWithMockHttpRequestIT {
     }
 
     @Test
-    public void updatePerson() throws Exception {
+     void updatePerson() throws Exception {
         Person personToUpdate = addPerson(new Person("Update", "Me", LocalDateTime.of(2000,10,10,14,55)));
         int numberOfPersonsBeforeUpdate = getAllPersons().length;
         personToUpdate.setFirstName("Updated");
@@ -95,7 +95,7 @@ public class PersonWithMockHttpRequestIT {
     }
 
     @Test
-    public void deletePerson() throws Exception {
+     void deletePerson() throws Exception {
         int numberOfPersonsBeforeDelete = getAllPersons().length;
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/persons/5");
@@ -108,7 +108,7 @@ public class PersonWithMockHttpRequestIT {
     }
 
     @Test
-    public void updatePersonDateOfBirth() throws Exception {
+     void updatePersonDateOfBirth() throws Exception {
         Person originalPerson = getPersonById(4L);
         LocalDateTime updatedDateOfBirth = LocalDateTime.of(2010, Month.MAY,10,13,43);
         String json = mapper.writeValueAsString(updatedDateOfBirth);

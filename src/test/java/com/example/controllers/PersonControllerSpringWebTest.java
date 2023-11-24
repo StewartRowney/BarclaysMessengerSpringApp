@@ -2,7 +2,6 @@ package com.example.controllers;
 
 import com.example.entities.Person;
 import com.example.services.IPersonService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -14,10 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -49,7 +45,7 @@ class PersonControllerSpringWebTest {
     }
 
     @Test
-    public void test_ServiceCalledFor_AddPerson() throws Exception {
+     void test_ServiceCalledFor_AddPerson() throws Exception {
         Person person = new Person("Jim", "Bob", LocalDateTime.of(2000,10,10,14,55));
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(person);
@@ -66,7 +62,7 @@ class PersonControllerSpringWebTest {
     }
 
     @Test
-    public void test_ServiceCalledFor_UpdatePerson() throws Exception {
+     void test_ServiceCalledFor_UpdatePerson() throws Exception {
         Person person = new Person("Jim", "Bob", LocalDateTime.of(2000,10,10,14,55));
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(person);
@@ -83,7 +79,7 @@ class PersonControllerSpringWebTest {
     }
 
     @Test
-    public void test_DeletePerson() throws Exception {
+     void test_DeletePerson() throws Exception {
         Long personId = 5L;
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/persons/" + personId);
         mockMvc.perform(requestBuilder);
@@ -92,8 +88,8 @@ class PersonControllerSpringWebTest {
     }
 
     @Test
-    public void test_UpdatePersonDateOfBirth() throws Exception {
-        Long personId = 4L;
+     void test_UpdatePersonDateOfBirth() throws Exception {
+        long personId = 4L;
         LocalDateTime dateOfBirth = LocalDateTime.MIN;
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(dateOfBirth);

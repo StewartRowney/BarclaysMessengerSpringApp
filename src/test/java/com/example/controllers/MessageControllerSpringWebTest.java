@@ -3,9 +3,7 @@ package com.example.controllers;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import com.example.services.IMessageService;
-import com.example.services.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,9 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.time.LocalDateTime;
-
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(MessageController.class)

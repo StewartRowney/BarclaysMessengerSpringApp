@@ -1,7 +1,6 @@
 package com.example.integrationtests;
 import com.example.entities.Message;
 import com.example.entities.Person;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -17,9 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,13 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @TestPropertySource(properties = {"spring.sql.init.mode=never"})
 @ActiveProfiles("test")
-public class MessageWithMockHttpRequestIT {
+ class MessageWithMockHttpRequestIT {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void testGettingAllMessages() throws Exception {
+     void testGettingAllMessages() throws Exception {
         Message[] actualMessages = getAllMessages();
 
         assertEquals("This is a message", actualMessages[0].getContent());
@@ -47,9 +43,9 @@ public class MessageWithMockHttpRequestIT {
     }
 
     @Test
-    public void testGettingMessage() throws Exception {
+     void testGettingMessage() throws Exception {
 
-        Long messageId = 3L;
+        long messageId = 3L;
 
         MvcResult result =
                 (this.mockMvc.perform(MockMvcRequestBuilders.get("/messages/" + messageId)))
@@ -66,7 +62,7 @@ public class MessageWithMockHttpRequestIT {
     }
 
     @Test
-    public void testGettingMessageUsingSenderFirstName() throws Exception {
+     void testGettingMessageUsingSenderFirstName() throws Exception {
 
         String name = "Stewart";
 
@@ -85,7 +81,7 @@ public class MessageWithMockHttpRequestIT {
     }
 
     @Test
-    public void testAddMessage() throws Exception {
+     void testAddMessage() throws Exception {
 
         int numberOfMessagesBeforeAdd = getAllMessages().length;
 

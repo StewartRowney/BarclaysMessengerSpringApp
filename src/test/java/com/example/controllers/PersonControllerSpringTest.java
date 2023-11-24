@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,35 +26,35 @@ class PersonControllerSpringTest {
     }
 
     @Test
-    public void test_GetPerson() {
+     void test_GetPerson() {
         Long personId = 2L;
         uut.getPerson(personId);
         verify(mockService, times(1)).getPersonById(personId);
     }
 
     @Test
-    public void test_AddPerson() {
+     void test_AddPerson() {
         Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
         uut.addPerson(person);
         verify(mockService, times(1)).addPerson(person);
     }
 
     @Test
-    public void test_UpdatePerson() {
+     void test_UpdatePerson() {
         Person person = new Person("Jim", "Bob", LocalDateTime.MIN);
         uut.updatePerson(person);
         verify(mockService, times(1)).updatePerson(person);
     }
 
     @Test
-    public void test_DeletePerson() {
+     void test_DeletePerson() {
         Long personId = 5L;
         uut.deletePerson(personId);
         verify(mockService, times(1)).deletePerson(personId);
     }
 
     @Test
-    public void test_UpdatePersonDateOfBirth() {
+     void test_UpdatePersonDateOfBirth() {
         Long personId = 4L;
         LocalDateTime dateOfBirth = LocalDateTime.MIN;
         uut.updatePersonDateOfBirth(personId, dateOfBirth);
