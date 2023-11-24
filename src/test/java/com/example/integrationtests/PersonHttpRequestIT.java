@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersonHttpRequestIT {
 
-
     @Test
     @Disabled
     void getAllPersonsTest() throws IOException {
