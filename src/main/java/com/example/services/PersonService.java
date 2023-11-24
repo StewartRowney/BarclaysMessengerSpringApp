@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +47,22 @@ public class PersonService implements IPersonService{
         if (!repo.existsById(person.getId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person to update does not exist");
         }
+
+        return repo.save(person);
+    }
+
+    @Override
+    public Person updatePersonDateOfBirth(Long personId, LocalDateTime dateOfBirth) {
+        if (personId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Person id cannot be null");
+        }
+
+        if (!repo.existsById(personId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person to update not found");
+        }
+
+        Person person = getPersonById(personId);
+        person.setDateOfBirth(dateOfBirth);
 
         return repo.save(person);
     }

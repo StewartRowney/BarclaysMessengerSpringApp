@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.entities.Person;
 import com.example.services.IPersonService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -88,5 +89,23 @@ class PersonControllerSpringWebTest {
         mockMvc.perform(requestBuilder);
 
         verify(mockService, times(1)).deletePerson(personId);
+    }
+
+    @Test
+    public void test_UpdatePersonDateOfBirth() throws Exception {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.MIN;
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        String json = mapper.writeValueAsString(dateOfBirth);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/persons/dateOfBirth/" + personId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(mockService, times(1)).updatePersonDateOfBirth(any(Long.class), any(LocalDateTime.class));
     }
 }

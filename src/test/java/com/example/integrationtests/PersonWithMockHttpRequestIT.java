@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +34,8 @@ public class PersonWithMockHttpRequestIT {
 
     @Autowired
     MockMvc mockMvc;
+
+    private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Test
     public void testGettingAllPersons() throws Exception {
@@ -50,16 +52,7 @@ public class PersonWithMockHttpRequestIT {
 
         long personId = 3L;
 
-        MvcResult result =
-                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons/" + personId)))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                        .andReturn();
-
-        String contentAsJson = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Person actualperson = mapper.readValue(contentAsJson, Person.class);
+        Person actualperson = getPersonById(personId);
 
         assertEquals("Ayush", actualperson.getFirstName());
     }
@@ -114,8 +107,32 @@ public class PersonWithMockHttpRequestIT {
         assertEquals(numberOfPersonsBeforeDelete - 1, numberOfPersonsAfterDelete);
     }
 
+    @Test
+    public void updatePersonDateOfBirth() throws Exception {
+        Person originalPerson = getPersonById(4L);
+        LocalDateTime updatedDateOfBirth = LocalDateTime.of(2010, Month.MAY,10,13,43);
+        String json = mapper.writeValueAsString(updatedDateOfBirth);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch("/persons/dateOfBirth/" + originalPerson.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = (mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn());
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        Person updatedPerson = mapper.readValue(contentAsJson, Person.class);
+
+        assertAll(
+                () -> assertEquals(updatedDateOfBirth, updatedPerson.getDateOfBirth()),
+                () -> assertNotEquals(originalPerson.getDateOfBirth(), updatedPerson.getDateOfBirth())
+        );
+    }
+
     private Person updatePerson(Person personToUpdate) throws Exception {
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(personToUpdate);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/persons")
@@ -133,7 +150,6 @@ public class PersonWithMockHttpRequestIT {
     }
 
     private Person addPerson(Person person) throws Exception {
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         String json = mapper.writeValueAsString(person);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/persons")
@@ -158,9 +174,18 @@ public class PersonWithMockHttpRequestIT {
                         .andReturn();
 
         String contentAsJson = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(contentAsJson, Person[].class);
+    }
+
+    private Person getPersonById(long personId) throws Exception {
+        MvcResult result =
+                (this.mockMvc.perform(MockMvcRequestBuilders.get("/persons/" + personId)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        String contentAsJson = result.getResponse().getContentAsString();
+        return mapper.readValue(contentAsJson, Person.class);
     }
 
 }

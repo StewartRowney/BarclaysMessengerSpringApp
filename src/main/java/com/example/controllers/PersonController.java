@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@SuppressWarnings("UnusedReturnValue")
 @RequestMapping("/persons")
 public class PersonController {
 
@@ -19,7 +22,7 @@ public class PersonController {
         this.service = service;
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<Person> getAllPersons() {
         return service.getAllPersons();
     }
@@ -39,6 +42,11 @@ public class PersonController {
     @ResponseStatus(HttpStatus.OK)
     public Person updatePerson(@RequestBody @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Person person) {
         return service.updatePerson(person);
+    }
+
+    @PatchMapping("/dateOfBirth/{personId}")
+    public Person updatePersonDateOfBirth(@PathVariable Long personId, @RequestBody @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime dateOfBirth) {
+        return service.updatePersonDateOfBirth(personId, dateOfBirth);
     }
 
     @DeleteMapping("/{personId}")

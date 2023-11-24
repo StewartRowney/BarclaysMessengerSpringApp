@@ -49,4 +49,12 @@ class PersonControllerNoSpringTest {
         verify(mockService, times(1)).deletePerson(personId);
     }
 
+    @Test
+    public void test_UpdatePersonDateOfBirth() {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.MIN;
+        uut.updatePersonDateOfBirth(personId, dateOfBirth);
+        verify(mockService, times(1)).updatePersonDateOfBirth(personId, dateOfBirth);
+    }
+
 }

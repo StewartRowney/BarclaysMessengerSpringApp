@@ -1,7 +1,6 @@
 package com.example.services;
 
 import com.example.data.IMessageRepository;
-import com.example.data.IPersonRepository;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;

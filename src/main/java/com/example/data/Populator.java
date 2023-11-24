@@ -1,7 +1,5 @@
 package com.example.data;
 
-import com.example.data.IMessageRepository;
-import com.example.data.IPersonRepository;
 import com.example.entities.Message;
 import com.example.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +7,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 
 @Component
+@SuppressWarnings("unused")
 @Profile("!test")
 public class Populator {
 

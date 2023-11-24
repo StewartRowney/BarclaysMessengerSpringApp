@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,6 +84,30 @@ class PersonServiceTest {
     @Test
     void test_DeletePerson_InvalidRequest_HasNoId() {
         assertThrows(ResponseStatusException.class,() -> uut.deletePerson(null));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_ValidRequest_InDatabase() {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        when(mockRepo.existsById(personId)).thenReturn(true);
+        when(mockRepo.findById(personId)).thenReturn(Optional.of(new Person()));
+        uut.updatePersonDateOfBirth(personId, dateOfBirth);
+        verify(mockRepo, times(1)).save(any(Person.class));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_ValidRequest_NotInDatabase() {
+        Long personId = 4L;
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        when(mockRepo.existsById(personId)).thenReturn(false);
+        assertThrows(ResponseStatusException.class, () -> uut.updatePersonDateOfBirth(personId, dateOfBirth));
+    }
+
+    @Test
+    void test_UpdatePersonDateOfBirth_InvalidRequest_HasNoId() {
+        LocalDateTime dateOfBirth = LocalDateTime.of(1999, Month.JULY,14,3,54);
+        assertThrows(ResponseStatusException.class, () -> uut.updatePersonDateOfBirth(null, dateOfBirth));
     }
 
     private Person getPerson() {
